@@ -25,3 +25,13 @@
 .read-the-docs {
   color: #888;
 }
+
+/* .fullscreen-container {
+  height: 100vh;
+} */
+
+@screens sm {
+  .fullscreen-container {
+    height: 100vh;
+  }
+}

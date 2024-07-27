@@ -99,34 +99,38 @@ function App() {
   });
 
   return (
-    <div class="flex justify-between">
-      <div class="flex flex-row justify-center items-center relative gap-20">
+    <div class="fullscreen-container flex justify-between ">
+      <div class="flex justify-center items-center flex-col relative gap-20">
         <div class="font-poppins flex flex-col gap-1">
           <button
-            class=" border-gray-200 hover:bg-gradient-to-r from-orange-100 to-slate-50"
+            class=" border-gray-200 text-xs lg:text-xl"
             onClick={() => setIsHidden(!isHidden())}
           >
             {isHidden() ? "Show" : "Hide"}
           </button>
           <button
-            class=" border-gray-200 hover:bg-gradient-to-r from-orange-100 to-slate-50"
+            class=" border-gray-200 text-xs lg:text-xl"
             onClick={generateWords}
           >
-            Generate Words!
+            Generate Words
           </button>
           {words() && words()[0] != "" && words()[1] != "" && (
-            <div class="font-poppins px-3">
+            <div class="font-sans font-extralight px-3 text-sm lg:text-m">
               Your words are:{" "}
               <div>
-                <div class="font-poppins font-bold text-xl">{words()[0]}</div>{" "}
+                <div class="font-poppins font-bold text-m lg:text-2xl">
+                  {words()[0]}
+                </div>{" "}
                 and{" "}
-                <div class="font-poppins font-bold text-xl">{words()[1]}</div>
+                <div class="font-poppins font-bold text-m lg:text-2xl">
+                  {words()[1]}
+                </div>
               </div>
             </div>
           )}
         </div>
 
-        <div class={`flex gap-1`}>
+        <div class={`flex`}>
           <div class="slider1 relative w-10 h-64  rounded-lg">
             <div
               class="absolute left-0 right-0  rounded-lg"
@@ -175,7 +179,9 @@ function App() {
               </div>
             </div>
           ) : (
-            <div class="slider2 relative w-10 h-64 bg-gray-300 rounded-lg"></div>
+            <div class="slider2 relative w-10 h-64 bg-gray-200 rounded-lg flex justify-center items-center text-red-500 font-bold">
+              X
+            </div>
           )}
         </div>
       </div>
