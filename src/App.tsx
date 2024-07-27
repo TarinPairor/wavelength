@@ -33,6 +33,11 @@ function App() {
   //   return score;
   // };
 
+  const randomize = () => {
+    // setIsHidden(true);
+    setLevel2(Math.floor(Math.random() * 100));
+  };
+
   const generateWords = () => {
     const randomIndex = Math.floor(Math.random() * OPPOSITES.length);
     setWords(OPPOSITES[randomIndex]);
@@ -100,89 +105,99 @@ function App() {
 
   return (
     <div class="fullscreen-container flex justify-between ">
-      <div class="flex justify-center items-center flex-col relative gap-20">
-        <div class="font-poppins flex flex-col gap-1">
+      <div class="flex justify-center items-center flex-col relative gap-16">
+        <div class="font-poppins flex flex-col gap-3">
           <button
-            class=" border-gray-200 text-xs lg:text-xl"
-            onClick={() => setIsHidden(!isHidden())}
+            class=" border-gray-200 text-sm lg:text-xl"
+            onClick={randomize}
           >
-            {isHidden() ? "Show" : "Hide"}
+            Randomize
           </button>
           <button
-            class=" border-gray-200 text-xs lg:text-xl"
+            class=" border-gray-200 text-sm lg:text-xl"
             onClick={generateWords}
           >
             Generate Words
           </button>
-          {words() && words()[0] != "" && words()[1] != "" && (
-            <div class="font-sans font-extralight px-3 text-sm lg:text-m">
-              Your words are:{" "}
-              <div>
-                <div class="font-poppins font-bold text-m lg:text-2xl">
-                  {words()[0]}
-                </div>{" "}
-                and{" "}
-                <div class="font-poppins font-bold text-m lg:text-2xl">
-                  {words()[1]}
-                </div>
+          <div class="font-sans font-extralight px-3 text-sm lg:text-m">
+            Your words are:{" "}
+            <div>
+              <div class="font-poppins font-bold text-m lg:text-2xl">
+                {words()[0] === "" ? "____" : words()[0]}
+              </div>{" "}
+              and{" "}
+              <div class="font-poppins font-bold text-m lg:text-2xl">
+                {words()[1] === "" ? "____" : words()[1]}
               </div>
-            </div>
-          )}
-        </div>
-
-        <div class={`flex`}>
-          <div class="slider1 relative w-10 h-64  rounded-lg">
-            <div
-              class="absolute left-0 right-0  rounded-lg"
-              style={{ bottom: 0, height: `${level1()}%` }}
-            ></div>
-            <div
-              class="absolute left-0 right-0 w-10 h-10  rounded-full cursor-pointer"
-              style={{ bottom: `${level1()}%`, transform: "translateY(50%)" }}
-              onMouseDown={handleMouseDown1}
-              onTouchStart={handleMouseDown1}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width={1.5}
-                stroke="currentColor"
-                class="size-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-                />
-              </svg>
             </div>
           </div>
-
-          {!isHidden() ? (
-            <div class="slider2 relative w-10 h-64 bg-gray-100 rounded-lg">
+        </div>
+        <div class="flex flex-col space-y-2">
+          <div class="font-poppins text-xs">{words()[0]}</div>
+          <div class={`flex`}>
+            <div class="slider1 relative w-10 h-64  rounded-lg">
               <div
                 class="absolute left-0 right-0  rounded-lg"
-                style={{ bottom: 0, height: `${level2()}%` }}
+                style={{ bottom: 0, height: `${level1()}%` }}
               ></div>
               <div
-                class="rightText absolute left-0 right-0 w-10 h-10 rounded-full cursor-pointer flex flex-col justify-center text-xs"
-                style={{ bottom: `${level2()}%`, transform: "translateY(50%)" }}
-                onMouseDown={handleMouseDown2}
-                onTouchStart={handleMouseDown2}
+                class="absolute left-0 right-0 w-10 h-10  rounded-full cursor-pointer"
+                style={{ bottom: `${level1()}%`, transform: "translateY(50%)" }}
+                onMouseDown={handleMouseDown1}
+                onTouchStart={handleMouseDown1}
               >
-                <div class="bg-yellow-500">2</div>
-                <div class="bg-orange-500">3</div>
-                <div class="bg-cyan-500">4</div>
-                <div class="bg-orange-500">3</div>
-                <div class="bg-yellow-500">2</div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width={1.5}
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                  />
+                </svg>
               </div>
             </div>
-          ) : (
-            <div class="slider2 relative w-10 h-64 bg-gray-200 rounded-lg flex justify-center items-center text-red-500 font-bold">
-              X
-            </div>
-          )}
+
+            {!isHidden() ? (
+              <div
+                class="slider2 relative w-10 h-64 bg-gray-100 rounded-lg"
+                onClick={() => setIsHidden(!isHidden())}
+              >
+                <div
+                  class="absolute left-0 right-0  rounded-lg"
+                  style={{ bottom: 0, height: `${level2()}%` }}
+                ></div>
+                <div
+                  class="rightText absolute left-0 right-0 w-10 h-10 rounded-full cursor-pointer flex flex-col justify-center text-xs"
+                  style={{
+                    bottom: `${level2()}%`,
+                    transform: "translateY(50%)",
+                  }}
+                  onMouseDown={handleMouseDown2}
+                  onTouchStart={handleMouseDown2}
+                >
+                  <div class="bg-yellow-500">2</div>
+                  <div class="bg-orange-500">3</div>
+                  <div class="bg-cyan-500">4</div>
+                  <div class="bg-orange-500">3</div>
+                  <div class="bg-yellow-500">2</div>
+                </div>
+              </div>
+            ) : (
+              <div
+                class="slider2 relative w-10 h-64 bg-gray-200 rounded-lg flex justify-center items-center text-red-500 font-bold"
+                onClick={() => setIsHidden(!isHidden())}
+              >
+                X
+              </div>
+            )}
+          </div>
+          <div class="font-poppins text-xs">{words()[1]}</div>
         </div>
       </div>
     </div>

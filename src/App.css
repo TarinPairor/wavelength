@@ -26,11 +26,14 @@
   color: #888;
 }
 
-/* .fullscreen-container {
-  height: 100vh;
-} */
+.fullscreen-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
 
-@screens sm {
+@media (min-width: 576px) {
   .fullscreen-container {
     height: 100vh;
   }
