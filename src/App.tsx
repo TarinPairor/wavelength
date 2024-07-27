@@ -1,46 +1,60 @@
 import { createSignal, onCleanup } from "solid-js";
 import "./App.css";
-import { OPPOSITES } from "./constants/opposites";
-
+import { COMBINED } from "./constants/opposites";
+import Ruler from "./components/Ruler";
 function App() {
-  const [level1, setLevel1] = createSignal(50 - 3);
+  const [level1, setLevel1] = createSignal(50 - 1);
   const [isDragging1, setIsDragging1] = createSignal(false);
   const [level2, setLevel2] = createSignal(50);
   const [isDragging2, setIsDragging2] = createSignal(false);
   const [isHidden, setIsHidden] = createSignal(false);
   const [words, setWords] = createSignal(["", ""]);
 
-  // const calculateScore = () => {
-  //   const leftLevel = addThree(Math.round(level1())); // Get the level of the left slider
-  //   const rightLevel = Math.round(level2()); // Get the level of the right slider
-  //   let score = 0;
-  //   const leftMoreThanRightBy = leftLevel - rightLevel;
-  //   if (leftMoreThanRightBy > 15) {
-  //     score = 0;
-  //   } else if (leftMoreThanRightBy > 9 && leftMoreThanRightBy <= 15) {
-  //     score = 2;
-  //   } else if (leftMoreThanRightBy > 3 && leftMoreThanRightBy <= 9) {
-  //     score = 3;
-  //   } else if (leftMoreThanRightBy > -4 && leftMoreThanRightBy <= 3) {
-  //     score = 4;
-  //   } else if (leftMoreThanRightBy > -10 && leftMoreThanRightBy <= -4) {
-  //     score = 3;
-  //   } else if (leftMoreThanRightBy > -16 && leftMoreThanRightBy <= -10) {
-  //     score = 2;
-  //   } else if (leftMoreThanRightBy <= -16) {
-  //     score = 0;
-  //   }
-  //   return score;
-  // };
+  const calculateScore = () => {
+    const leftLevel = Math.round(level1()) + 1; // Get the level of the left slider
+    // console.log("leftLevel", leftLevel);
+    const rightLevel = Math.round(level2()); // Get the level of the right slider
+    // console.log("rightLevel", rightLevel);
+    let score = 0;
+    const leftMoreThanRightBy = leftLevel - rightLevel;
+    const size = 4;
+    // const diff = Math.abs(leftMoreThanRightBy - size);
+    if (
+      leftMoreThanRightBy <= size / 2 &&
+      leftMoreThanRightBy >= -size / 2 - 1
+    ) {
+      score = 4;
+    } else if (
+      leftMoreThanRightBy <= (size / 2) * 4 &&
+      leftMoreThanRightBy >= (-size / 2) * 4
+    ) {
+      score = 3;
+    } else if (
+      leftMoreThanRightBy <= (size / 2) * 6 &&
+      leftMoreThanRightBy >= (-size / 2) * 6
+    ) {
+      score = 2;
+    }
+    setIsHidden(false);
 
+    console.log(`Score: ${score}`);
+  };
+
+  /**
+   * The `randomize` function sets `Level1` to 49 and `Level2` to a random number between 0 and 99.
+   */
   const randomize = () => {
-    // setIsHidden(true);
+    setLevel1(50 - 1);
     setLevel2(Math.floor(Math.random() * 100));
   };
 
+  /**
+   * The above code snippet includes functions for generating random words and handling mouse events in
+   * a TypeScript React component.
+   */
   const generateWords = () => {
-    const randomIndex = Math.floor(Math.random() * OPPOSITES.length);
-    setWords(OPPOSITES[randomIndex]);
+    const randomIndex = Math.floor(Math.random() * COMBINED.length);
+    setWords(COMBINED[randomIndex]);
   };
 
   const handleMouseDown1 = () => {
@@ -51,6 +65,16 @@ function App() {
     setIsDragging1(false);
   };
 
+  /**
+   * The function `handleMouseMove1` calculates a new level based on the vertical position of the mouse
+   * or touch event relative to a slider element.
+   * @param {MouseEvent | TouchEvent} event - The `event` parameter in the `handleMouseMove1` function
+   * can be either a `MouseEvent` or a `TouchEvent`.
+   * @remarks If the function `isDragging1()` returns false, the function `handleMouseMove1` will
+   * return early and not execute the rest of the code. If the `slider` element is not found in the
+   * document, the function will also return early. If both conditions are met, the function will
+   * calculate a new level based on the mouse or touch event position and return that new level.
+   */
   const handleMouseMove1 = (event: MouseEvent | TouchEvent) => {
     if (!isDragging1()) return;
     const slider = document.querySelector(".slider1");
@@ -60,7 +84,7 @@ function App() {
       (event as MouseEvent).clientY || (event as TouchEvent).touches[0].clientY;
     const offsetY = rect.bottom - clientY;
     const newLevel =
-      Math.max(0, Math.min(100, (offsetY / rect.height) * 100)) - 3;
+      Math.max(0, Math.min(100, (offsetY / rect.height) * 100)) - 1;
     setLevel1(newLevel);
   };
 
@@ -72,6 +96,16 @@ function App() {
     setIsDragging2(false);
   };
 
+  /**
+   * The function `handleMouseMove2` calculates a new level based on the vertical position of the mouse
+   * or touch event relative to a slider element.
+   * @param {MouseEvent | TouchEvent} event - The `event` parameter in the `handleMouseMove2` function
+   * can be either a `MouseEvent` or a `TouchEvent`.
+   * @remarks If the function `isDragging2()` returns false, the function `handleMouseMove2` will
+   * return early and not execute the rest of the code. If `slider` is not found in the document, the
+   * function will also return early. If both conditions are met, the function will calculate a new
+   * level based on the mouse or touch event and return nothing explicitly (i.e., it does not have
+   */
   const handleMouseMove2 = (event: MouseEvent | TouchEvent) => {
     if (!isDragging2()) return;
     const slider = document.querySelector(".slider2");
@@ -105,8 +139,8 @@ function App() {
 
   return (
     <div class="fullscreen-container flex justify-between ">
-      <div class="flex justify-center items-center flex-col relative gap-16">
-        <div class="font-poppins flex flex-col gap-3">
+      <div class="flex justify-center items-center flex-col relative gap-8 lg:flex-row mt-1">
+        <div class="font-poppins flex flex-col gap-3 ">
           <button
             class=" border-gray-200 text-sm lg:text-xl"
             onClick={randomize}
@@ -119,7 +153,7 @@ function App() {
           >
             Generate Words
           </button>
-          <div class="font-sans font-extralight px-3 text-sm lg:text-m">
+          {/* <div class="font-sans font-extralight px-3 text-sm lg:text-m">
             Your words are:{" "}
             <div>
               <div class="font-poppins font-bold text-m lg:text-2xl">
@@ -130,12 +164,14 @@ function App() {
                 {words()[1] === "" ? "____" : words()[1]}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div class="flex flex-col space-y-2">
-          <div class="font-poppins text-xs">{words()[0]}</div>
-          <div class={`flex`}>
-            <div class="slider1 relative w-10 h-64  rounded-lg">
+        <div class="flex flex-col space-y-10 items-center ">
+          <div class="font-poppins text-s z-10 font-bold text-blue-600 lg:text-2xl">
+            {words()[0] !== "" ? words()[0] : "_______"}
+          </div>
+          <div class={`flex flex-row space-x-2`}>
+            <div class="slider1 relative w-10 h-80  rounded-lg">
               <div
                 class="absolute left-0 right-0  rounded-lg"
                 style={{ bottom: 0, height: `${level1()}%` }}
@@ -152,7 +188,7 @@ function App() {
                   viewBox="0 0 24 24"
                   stroke-width={1.5}
                   stroke="currentColor"
-                  class="size-6"
+                  class="size-8"
                 >
                   <path
                     stroke-linecap="round"
@@ -165,7 +201,7 @@ function App() {
 
             {!isHidden() ? (
               <div
-                class="slider2 relative w-10 h-64 bg-gray-100 rounded-lg"
+                class="slider2 relative w-10 h-80 bg-gray-100 rounded-lg"
                 onClick={() => setIsHidden(!isHidden())}
               >
                 <div
@@ -181,23 +217,27 @@ function App() {
                   onMouseDown={handleMouseDown2}
                   onTouchStart={handleMouseDown2}
                 >
-                  <div class="bg-yellow-500">2</div>
-                  <div class="bg-orange-500">3</div>
-                  <div class="bg-cyan-500">4</div>
-                  <div class="bg-orange-500">3</div>
-                  <div class="bg-yellow-500">2</div>
+                  <div class="bg-yellow-400 rounded-t-sm">2</div>
+                  <div class="bg-orange-400">3</div>
+                  <div class="bg-cyan-400">4</div>
+                  <div class="bg-orange-400">3</div>
+                  <div class="bg-yellow-400 rounded-b-sm">2</div>
                 </div>
               </div>
             ) : (
               <div
-                class="slider2 relative w-10 h-64 bg-gray-200 rounded-lg flex justify-center items-center text-red-500 font-bold"
-                onClick={() => setIsHidden(!isHidden())}
+                class="slider2 relative w-10 h-80 bg-gray-200 rounded-lg flex justify-center items-center text-gray-800 lg:hover:scale-110 font-semibold text-xs"
+                onClick={calculateScore}
               >
-                X
+                Score
               </div>
             )}
+            <Ruler onClick={() => setIsHidden(!isHidden())} />
           </div>
-          <div class="font-poppins text-xs">{words()[1]}</div>
+
+          <div class="font-poppins text-s z-10 text-red-600 font-bold lg:text-2xl">
+            {words()[1] !== "" ? words()[1] : "_______"}
+          </div>
         </div>
       </div>
     </div>
