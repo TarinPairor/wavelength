@@ -10,63 +10,6 @@ function App() {
   const [isHidden, setIsHidden] = createSignal(false);
   const [words, setWords] = createSignal(["", ""]);
 
-  const generateWords = () => {
-    const randomIndex = Math.floor(Math.random() * OPPOSITES.length);
-    setWords(OPPOSITES[randomIndex]);
-  };
-
-  const handleMouseDown1 = () => {
-    setIsDragging1(true);
-  };
-
-  const handleMouseUp1 = () => {
-    setIsDragging1(false);
-  };
-
-  // const addThree = (num: number) => {
-  //   return num + 3;
-  // };
-
-  const handleMouseMove1 = (event: MouseEvent) => {
-    if (!isDragging1()) return;
-    const slider = document.querySelector(".slider1");
-    if (!slider) return;
-    const rect = slider.getBoundingClientRect();
-    const offsetY = rect.bottom - event.clientY;
-    const newLevel =
-      Math.max(0, Math.min(100, (offsetY / rect.height) * 100)) - 3;
-    setLevel1(newLevel);
-  };
-
-  const handleMouseDown2 = () => {
-    setIsDragging2(true);
-  };
-
-  const handleMouseUp2 = () => {
-    setIsDragging2(false);
-  };
-
-  const handleMouseMove2 = (event: MouseEvent) => {
-    if (!isDragging2()) return;
-    const slider = document.querySelector(".slider2");
-    if (!slider) return;
-    const rect = slider.getBoundingClientRect();
-    const offsetY = rect.bottom - event.clientY;
-    const newLevel = Math.max(0, Math.min(100, (offsetY / rect.height) * 100));
-    setLevel2(newLevel);
-  };
-
-  document.addEventListener("mousemove", handleMouseMove1);
-  document.addEventListener("mouseup", handleMouseUp1);
-  document.addEventListener("mousemove", handleMouseMove2);
-  document.addEventListener("mouseup", handleMouseUp2);
-  onCleanup(() => {
-    document.removeEventListener("mousemove", handleMouseMove1);
-    document.removeEventListener("mouseup", handleMouseUp1);
-    document.removeEventListener("mousemove", handleMouseMove2);
-    document.removeEventListener("mouseup", handleMouseUp2);
-  });
-
   // const calculateScore = () => {
   //   const leftLevel = addThree(Math.round(level1())); // Get the level of the left slider
   //   const rightLevel = Math.round(level2()); // Get the level of the right slider
@@ -90,6 +33,71 @@ function App() {
   //   return score;
   // };
 
+  const generateWords = () => {
+    const randomIndex = Math.floor(Math.random() * OPPOSITES.length);
+    setWords(OPPOSITES[randomIndex]);
+  };
+
+  const handleMouseDown1 = () => {
+    setIsDragging1(true);
+  };
+
+  const handleMouseUp1 = () => {
+    setIsDragging1(false);
+  };
+
+  const handleMouseMove1 = (event: MouseEvent | TouchEvent) => {
+    if (!isDragging1()) return;
+    const slider = document.querySelector(".slider1");
+    if (!slider) return;
+    const rect = slider.getBoundingClientRect();
+    const clientY =
+      (event as MouseEvent).clientY || (event as TouchEvent).touches[0].clientY;
+    const offsetY = rect.bottom - clientY;
+    const newLevel =
+      Math.max(0, Math.min(100, (offsetY / rect.height) * 100)) - 3;
+    setLevel1(newLevel);
+  };
+
+  const handleMouseDown2 = () => {
+    setIsDragging2(true);
+  };
+
+  const handleMouseUp2 = () => {
+    setIsDragging2(false);
+  };
+
+  const handleMouseMove2 = (event: MouseEvent | TouchEvent) => {
+    if (!isDragging2()) return;
+    const slider = document.querySelector(".slider2");
+    if (!slider) return;
+    const rect = slider.getBoundingClientRect();
+    const clientY =
+      (event as MouseEvent).clientY || (event as TouchEvent).touches[0].clientY;
+    const offsetY = rect.bottom - clientY;
+    const newLevel = Math.max(0, Math.min(100, (offsetY / rect.height) * 100));
+    setLevel2(newLevel);
+  };
+
+  document.addEventListener("mousemove", handleMouseMove1);
+  document.addEventListener("mouseup", handleMouseUp1);
+  document.addEventListener("mousemove", handleMouseMove2);
+  document.addEventListener("mouseup", handleMouseUp2);
+  document.addEventListener("touchmove", handleMouseMove1);
+  document.addEventListener("touchend", handleMouseUp1);
+  document.addEventListener("touchmove", handleMouseMove2);
+  document.addEventListener("touchend", handleMouseUp2);
+  onCleanup(() => {
+    document.removeEventListener("mousemove", handleMouseMove1);
+    document.removeEventListener("mouseup", handleMouseUp1);
+    document.removeEventListener("mousemove", handleMouseMove2);
+    document.removeEventListener("mouseup", handleMouseUp2);
+    document.removeEventListener("touchmove", handleMouseMove1);
+    document.removeEventListener("touchend", handleMouseUp1);
+    document.removeEventListener("touchmove", handleMouseMove2);
+    document.removeEventListener("touchend", handleMouseUp2);
+  });
+
   return (
     <div class="flex justify-between">
       <div class="flex flex-row justify-center items-center relative gap-20">
@@ -100,9 +108,6 @@ function App() {
           >
             {isHidden() ? "Show" : "Hide"}
           </button>
-          {/* <button class="bg-white" onClick={calculateScore}>
-            Score{" "}
-          </button> */}
           <button
             class="bg-white border-gray-200 hover:bg-gradient-to-r from-orange-100 to-slate-50"
             onClick={generateWords}
@@ -131,6 +136,7 @@ function App() {
               class="absolute left-0 right-0 w-10 h-10  rounded-full cursor-pointer"
               style={{ bottom: `${level1()}%`, transform: "translateY(50%)" }}
               onMouseDown={handleMouseDown1}
+              onTouchStart={handleMouseDown1}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -159,6 +165,7 @@ function App() {
                 class="rightText absolute left-0 right-0 w-10 h-10 rounded-full cursor-pointer flex flex-col justify-center text-xs"
                 style={{ bottom: `${level2()}%`, transform: "translateY(50%)" }}
                 onMouseDown={handleMouseDown2}
+                onTouchStart={handleMouseDown2}
               >
                 <div class="bg-yellow-500">2</div>
                 <div class="bg-orange-500">3</div>
