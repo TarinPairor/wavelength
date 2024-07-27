@@ -23,9 +23,9 @@ function App() {
     setIsDragging1(false);
   };
 
-  const addThree = (num: number) => {
-    return num + 3;
-  };
+  // const addThree = (num: number) => {
+  //   return num + 3;
+  // };
 
   const handleMouseMove1 = (event: MouseEvent) => {
     if (!isDragging1()) return;
@@ -67,28 +67,28 @@ function App() {
     document.removeEventListener("mouseup", handleMouseUp2);
   });
 
-  const calculateScore = () => {
-    const leftLevel = addThree(Math.round(level1())); // Get the level of the left slider
-    const rightLevel = Math.round(level2()); // Get the level of the right slider
-    let score = 0;
-    const leftMoreThanRightBy = leftLevel - rightLevel;
-    if (leftMoreThanRightBy > 15) {
-      score = 0;
-    } else if (leftMoreThanRightBy > 9 && leftMoreThanRightBy <= 15) {
-      score = 2;
-    } else if (leftMoreThanRightBy > 3 && leftMoreThanRightBy <= 9) {
-      score = 3;
-    } else if (leftMoreThanRightBy > -4 && leftMoreThanRightBy <= 3) {
-      score = 4;
-    } else if (leftMoreThanRightBy > -10 && leftMoreThanRightBy <= -4) {
-      score = 3;
-    } else if (leftMoreThanRightBy > -16 && leftMoreThanRightBy <= -10) {
-      score = 2;
-    } else if (leftMoreThanRightBy <= -16) {
-      score = 0;
-    }
-    return score;
-  };
+  // const calculateScore = () => {
+  //   const leftLevel = addThree(Math.round(level1())); // Get the level of the left slider
+  //   const rightLevel = Math.round(level2()); // Get the level of the right slider
+  //   let score = 0;
+  //   const leftMoreThanRightBy = leftLevel - rightLevel;
+  //   if (leftMoreThanRightBy > 15) {
+  //     score = 0;
+  //   } else if (leftMoreThanRightBy > 9 && leftMoreThanRightBy <= 15) {
+  //     score = 2;
+  //   } else if (leftMoreThanRightBy > 3 && leftMoreThanRightBy <= 9) {
+  //     score = 3;
+  //   } else if (leftMoreThanRightBy > -4 && leftMoreThanRightBy <= 3) {
+  //     score = 4;
+  //   } else if (leftMoreThanRightBy > -10 && leftMoreThanRightBy <= -4) {
+  //     score = 3;
+  //   } else if (leftMoreThanRightBy > -16 && leftMoreThanRightBy <= -10) {
+  //     score = 2;
+  //   } else if (leftMoreThanRightBy <= -16) {
+  //     score = 0;
+  //   }
+  //   return score;
+  // };
 
   return (
     <div class="flex justify-between">
