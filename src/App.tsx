@@ -103,13 +103,13 @@ function App() {
       <div class="flex flex-row justify-center items-center relative gap-20">
         <div class="font-poppins flex flex-col gap-1">
           <button
-            class="bg-white border-gray-200 hover:bg-gradient-to-r from-orange-100 to-slate-50"
+            class=" border-gray-200 hover:bg-gradient-to-r from-orange-100 to-slate-50"
             onClick={() => setIsHidden(!isHidden())}
           >
             {isHidden() ? "Show" : "Hide"}
           </button>
           <button
-            class="bg-white border-gray-200 hover:bg-gradient-to-r from-orange-100 to-slate-50"
+            class=" border-gray-200 hover:bg-gradient-to-r from-orange-100 to-slate-50"
             onClick={generateWords}
           >
             Generate Words!
@@ -126,7 +126,7 @@ function App() {
           )}
         </div>
 
-        <div class={`flex`}>
+        <div class={`flex gap-1`}>
           <div class="slider1 relative w-10 h-64  rounded-lg">
             <div
               class="absolute left-0 right-0  rounded-lg"
@@ -156,7 +156,7 @@ function App() {
           </div>
 
           {!isHidden() ? (
-            <div class="slider2 relative w-10 h-64 bg-gray-300 rounded-lg">
+            <div class="slider2 relative w-10 h-64 bg-gray-100 rounded-lg">
               <div
                 class="absolute left-0 right-0  rounded-lg"
                 style={{ bottom: 0, height: `${level2()}%` }}
