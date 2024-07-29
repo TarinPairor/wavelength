@@ -49,13 +49,14 @@ export default function InstructionModal() {
           <div class="basic-modal text-gray-500 flex flex-col gap-3 font-poppins">
             <h1 class="font-bold text-xl">How to Play</h1>
             <p>
-              The is simple 2-player game. The game randomizes a percentage by
-              placing the score bar at a random point (4 being the center), and
-              also generates a pair of antonyms. One player will then hide the
-              score bar by clicking on it and say a phrase describing where it
-              is (without using numbers). The other player will then assign the
-              pointer to where he thinks the score bar is and then reveals the
-              answer by clicking on it again.
+              The is simple 2-player game based on a popular TikTok board game.
+              The game randomizes a percentage by placing the score bar at a
+              random point (4 being the center), and also generates a pair of
+              antonyms. One player will then hide the score bar by clicking on
+              it and say a phrase describing where it is (without using
+              numbers). The other player will then assign the pointer to where
+              he thinks the score bar is and then reveals the answer by clicking
+              on it again.
             </p>
             <h1 class="font-bold text-base">Example</h1>
             <ol class="text-s font-sans list-disc">
@@ -63,8 +64,8 @@ export default function InstructionModal() {
                 Player 1 clicks <i>Randomize</i> and <i>Generate Words</i>
               </li>
               <li>
-                The words are <i>"Hot"</i> and <i>"Cold"</i> top to bottom and
-                the 4 of the score bar is at 100%
+                The words are <i>"Hot"</i> and <i>"Cold"</i> and the 4 of the
+                score bar is at the 100 mark/highest point.
               </li>
               <li>
                 Player 1 hides the score bar and says <i>"The sun"</i>
@@ -90,9 +91,14 @@ export default function InstructionModal() {
             <h2 class="font-semibold">Score bar and Ruler</h2>
             <p>
               {" "}
-              You can click on botht the score bar and the ruler to toggle the
+              You can click on both the score bar and the ruler to toggle the
               score display.
             </p>
+            <h2 class="font-semibold text-xl">
+              <a href="https://www.tiktok.com/@michael.dicostanzo/video/7330776298576514347?lang=en">
+                Board game version
+              </a>
+            </h2>
           </div>
         </Box>
       </Modal>
