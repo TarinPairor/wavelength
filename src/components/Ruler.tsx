@@ -5,7 +5,7 @@ interface RulerProps {
 function Ruler({ onClick }: RulerProps) {
   return (
     <div
-      class=" relative w-10 h-80 border-x-transparent border-y flex flex-col justify-between font-extralight text-[10px]"
+      class=" relative w-10 h-80 border-x-transparent border-y flex flex-col justify-between font-extralight text-[10px] lg:hover:scale-105"
       onClick={onClick}
     >
       <div class="flex flex-col justify-between items-center h-full">

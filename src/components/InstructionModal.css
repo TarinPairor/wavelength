@@ -1,0 +1,12 @@
+/* .basic-modal h1 {
+  color: red;
+} */
+
+.basic-modal {
+  max-height: 80vh; /* Adjust as needed */
+  overflow-y: auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

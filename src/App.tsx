@@ -1,7 +1,9 @@
-import { createSignal, onCleanup } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 import "./App.css";
 import { COMBINED } from "./constants/opposites";
+import { ORIGINAL_OPPOSITES } from "./constants/opposites";
 import Ruler from "./components/Ruler";
+import { Stack, Alert } from "@suid/material";
 function App() {
   const [level1, setLevel1] = createSignal(50 - 1);
   const [isDragging1, setIsDragging1] = createSignal(false);
@@ -9,7 +11,50 @@ function App() {
   const [isDragging2, setIsDragging2] = createSignal(false);
   const [isHidden, setIsHidden] = createSignal(false);
   const [words, setWords] = createSignal(["", ""]);
+  const [wordList, setWordList] = createSignal<string[][]>([]);
+  const [isDisplayScore, setIsDisplayScore] = createSignal<boolean | null>(
+    null
+  );
+  const [alert, setAlert] = createSignal(false);
 
+  /**
+   * The `loadParams` function parses URL parameters to determine settings for displaying random
+   * adjectives, original words, and score in a word game.
+   * @remarks If the `wordList()` length is not equal to 0, nothing is returned. If the
+   * `isDisplayScore()` is not null, nothing is returned. Otherwise, the function sets the `wordList`
+   * based on the parameters `randomAdjectives` and `originalWords`, and sets the `isDisplayScore`
+   * based on the `displayScore` parameter.
+   */
+  const loadParams = () => {
+    const params = new URLSearchParams(window.location.search);
+    console.log("URLSearchParams:", params.toString());
+    const isRandomAdjectivesParam = params.get("randomAdjectives") === "true";
+    const isOriginalWordsParam = params.get("originalWords") === "true";
+    const isDisplayScoreParam = params.get("displayScore") === "true";
+
+    // If the wordList is already set, don't set it again
+    if (wordList().length !== 0) {
+      return;
+    }
+    const newWords = [
+      ...(isRandomAdjectivesParam ? COMBINED : []),
+      ...(isOriginalWordsParam ? ORIGINAL_OPPOSITES : []),
+    ];
+    setWordList(newWords);
+
+    // if isDisplayScore is already set, don't set it again
+    if (isDisplayScore() !== null) {
+      return;
+    }
+    setIsDisplayScore(isDisplayScoreParam);
+  };
+
+  /**
+   * The calculateScore function determines a score based on the difference between two slider levels
+   * and updates the score accordingly.
+   * @returns The function `calculateScore` is returning the variable `score`, which holds the
+   * calculated score based on the levels of the left and right sliders.
+   */
   const calculateScore = () => {
     const leftLevel = Math.round(level1()) + 1; // Get the level of the left slider
     // console.log("leftLevel", leftLevel);
@@ -38,7 +83,22 @@ function App() {
     setIsHidden(false);
 
     console.log(`Score: ${score}`);
+    if (isDisplayScore() === null) {
+      loadParams();
+    }
+    if (isDisplayScore() && alert() === false) {
+      setAlert(true);
+    }
+    return score;
   };
+
+  createEffect(() => {
+    if (alert()) {
+      setTimeout(() => {
+        setAlert(false);
+      }, 1000);
+    }
+  });
 
   /**
    * The `randomize` function sets `Level1` to 49 and `Level2` to a random number between 0 and 99.
@@ -53,8 +113,11 @@ function App() {
    * a TypeScript React component.
    */
   const generateWords = () => {
-    const randomIndex = Math.floor(Math.random() * COMBINED.length);
-    setWords(COMBINED[randomIndex]);
+    if (wordList().length === 0) {
+      loadParams();
+    }
+    const randomIndex = Math.floor(Math.random() * wordList().length);
+    setWords(wordList()[randomIndex]);
   };
 
   const handleMouseDown1 = () => {
@@ -137,9 +200,20 @@ function App() {
     document.removeEventListener("touchend", handleMouseUp2);
   });
 
+  const SuidAlert = () => {
+    return (
+      <div class="">
+        <Stack sx={{ width: "100%" }} spacing={2}>
+          <Alert severity="info">You scored {calculateScore()}</Alert>
+        </Stack>
+      </div>
+    );
+  };
+
   return (
     <div class="fullscreen-container flex justify-between ">
-      <div class="flex justify-center items-center flex-col relative gap-8 lg:flex-row mt-1">
+      {alert() && <SuidAlert />}
+      <div class="flex justify-center items-center flex-col relative gap-8 md:flex-row mt-2">
         <div class="font-poppins flex flex-col gap-3 ">
           <button
             class=" border-gray-200 text-sm lg:text-xl"
@@ -226,7 +300,7 @@ function App() {
               </div>
             ) : (
               <div
-                class="slider2 relative w-10 h-80 bg-gray-200 rounded-lg flex justify-center items-center text-gray-800 lg:hover:scale-110 font-semibold text-xs"
+                class="slider2 relative w-10 h-80 bg-gray-200 rounded-lg flex justify-center items-center text-gray-800 lg:hover:bg-gray-300 font-semibold text-xs"
                 onClick={calculateScore}
               >
                 Score
